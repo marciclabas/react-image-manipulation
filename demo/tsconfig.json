@@ -21,6 +21,10 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
+      // "use-cropper/animation": ["/home/m4rs/github/ui/react-image-manipulation/use-cropper/src/animation"],
+      // "use-cropper": ["/home/m4rs/github/ui/react-image-manipulation/use-cropper/src"],
+      // "use-grid-selector/worker": ["/home/m4rs/github/ui/react-image-manipulation/use-grid-selector/src/worker"],
+      // "use-grid-selector": ["/home/m4rs/github/ui/react-image-manipulation/use-grid-selector/src"],
     }
   },
   "include": ["src"],

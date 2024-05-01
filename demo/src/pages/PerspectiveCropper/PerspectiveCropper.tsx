@@ -3,6 +3,7 @@ import { useCropperAnimation } from 'use-cropper/animation'
 import { prepareWorker } from 'opencv-tools/workers/correct'
 import { useEffect, useRef, useState } from "react"
 import { managedPromise } from "@haskellian/async/promises/single"
+import { Button, Center, HStack, VStack } from '@chakra-ui/react'
 
 const worker = new Worker(new URL('correct-worker.ts', import.meta.url), { type: 'module' })
 const api = prepareWorker(worker)
@@ -33,17 +34,19 @@ function PerspectiveCropper() {
   }
 
   return (
-    <div style={{height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'gray', overflow: 'hidden'}}>
-      <div style={{ height: '80%', width: '40vw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <HStack h='100vh' w='100vw' align='center' justify='center'>
+      <Center w='40%' pos='relative' h='80%'>
         {corrected && <img src={corrected} style={{maxHeight: '100%'}} />}
-      </div>
-      <div style={{ height: '80%', width: '30vw', position: 'relative'}}>
+      </Center>
+      <VStack w='30vw' pos='relative' h='80%'>
         <canvas ref={ref} />
         {animation}
-      </div>
-      <button style={{margin: '1rem', padding: '1rem', fontSize: '1.5rem'}} onClick={() => run(getCoords())}>Animate</button>
-      <button style={{margin: '1rem', padding: '1rem', fontSize: '1.5rem'}} onClick={correct}>Correct</button>
-    </div>
+      </VStack>
+      <VStack w='20%'>
+        <Button onClick={() => run(getCoords())}>Animate</Button>
+        <Button onClick={correct}>Correct</Button>
+      </VStack>
+    </HStack>
   )
 }
 

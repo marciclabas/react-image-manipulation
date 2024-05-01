@@ -11,7 +11,7 @@ export const coords = (obj: fabric.Object): Vec2 => [obj.get('left')!, obj.get('
 export function clamped(p: Vec2, img: fabric.Image): Vec2 {
   const pmin = coords(img)
   const pmax = add(pmin, size(img))
-  return clamp(p, pmin, pmax)
+  return clamp(pmin, p, pmax)
 }
 
 /** Maps `(x, y) in ([0, 1], [0, 1])` to `([obj.left, obj.right], [obj.top, obj.bot])`. I.e:

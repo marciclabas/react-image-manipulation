@@ -1,20 +1,23 @@
-import { Button, VStack } from "@chakra-ui/react"
+import { Button, ButtonGroup, Heading, VStack } from "@chakra-ui/react"
 import { RouteObject, useNavigate, useRoutes } from "react-router-dom";
 import PerspectiveCropper from './pages/PerspectiveCropper'
+import GridSelector from './pages/GridSelector'
 
 const PLAYGROUND_PAGES: Record<string, JSX.Element> = {
-  cropper: <PerspectiveCropper />,
+  'Grid Selector': <GridSelector />,
+  'Perspective Cropper': <PerspectiveCropper />,
 }
 
 function Menu() {
   const goto = useNavigate()
   const menu = (
     <VStack h='100vh' w='100vw' align='center' justify='center'>
-      <VStack h='max-content' gap='0.2rem'>
+      <Heading>Image Manipulation UIs</Heading>
+      <ButtonGroup isAttached>
         {Object.entries(PLAYGROUND_PAGES).map(([page], i) => (
-          <Button p='0.5rem' key={i} onClick={() => goto(page)}>{page}</Button>
+          <Button p='2rem' key={i} onClick={() => goto(page)}>{page}</Button>
         ))}
-      </VStack>
+      </ButtonGroup>
     </VStack>
   )
 
