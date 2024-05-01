@@ -1,0 +1,31 @@
+dev:
+  yarn dev --host
+
+build:
+  yarn run build
+
+preview:
+  yarn preview --host
+
+build-preview: build preview
+
+install-ramda:
+  yarn add ramda --dev @types/ramda
+
+# Create a new page
+add PAGE:
+  #!/bin/bash
+  mkdir src/pages/{{uppercamelcase(PAGE)}} || (echo "{{uppercamelcase(PAGE)}} already exists" && exit 0)
+  
+  LAST_IMPORT=$(grep -n '^import' src/App.tsx | tail -1 | cut -d : -f 1)
+  sed -i "$((LAST_IMPORT+1)) i import {{uppercamelcase(PAGE)}} from './pages/{{uppercamelcase(PAGE)}}'" src/App.tsx | head
+
+  PAGES=$(grep -n 'PLAYGROUND_PAGES' src/App.tsx | head -1 | cut -d : -f 1)
+  sed -i "$((PAGES+1)) i\  {{lowercase(PAGE)}}: <{{uppercamelcase(PAGE)}} />," src/App.tsx | head
+
+  echo "export function {{uppercamelcase(PAGE)}}() {" > src/pages/{{uppercamelcase(PAGE)}}/{{uppercamelcase(PAGE)}}.tsx
+  echo -e "  return (\n    <></>\n  )\n}\nexport default {{uppercamelcase(PAGE)}}" >> src/pages/{{uppercamelcase(PAGE)}}/{{uppercamelcase(PAGE)}}.tsx
+
+  echo "import {{uppercamelcase(PAGE)}} from './{{uppercamelcase(PAGE)}}.tsx'" > src/pages/{{uppercamelcase(PAGE)}}/index.ts
+  echo "export default {{uppercamelcase(PAGE)}}" >> src/pages/{{uppercamelcase(PAGE)}}/index.ts
+

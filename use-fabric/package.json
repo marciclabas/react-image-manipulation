@@ -1,0 +1,32 @@
+{
+  "name": "use-fabric",
+  "version": "1.1.5",
+  "description": "Hooks-based API for FabricJS",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moveread/REPO.git"
+  },
+  "author": "Marcel Claramunt",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/fabric": "^5.3.7",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "fabric": "^5.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": ""
+  },
+  "peerDependencies": {
+    "fabric": "^5.3.0"
+  }
+}

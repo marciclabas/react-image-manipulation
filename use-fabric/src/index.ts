@@ -1,0 +1,1 @@
+export { type FabricHook, useFabric } from './use-fabric.js'
