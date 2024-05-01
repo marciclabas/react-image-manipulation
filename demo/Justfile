@@ -29,3 +29,12 @@ add PAGE:
   echo "import {{uppercamelcase(PAGE)}} from './{{uppercamelcase(PAGE)}}.tsx'" > src/pages/{{uppercamelcase(PAGE)}}/index.ts
   echo "export default {{uppercamelcase(PAGE)}}" >> src/pages/{{uppercamelcase(PAGE)}}/index.ts
 
+# Publish to gh-pages
+gh-pages PATH='dist': build
+  @ git_root=$(git rev-parse --show-toplevel) && \
+  path=$(realpath --relative-to=$git_root {{PATH}}) && \
+  echo "Pushing $path" && \
+  cd $git_root && \
+  git subtree push --prefix $path origin gh-pages || \
+  git push origin `git subtree split --prefix $path main`:gh-pages --force
+  
