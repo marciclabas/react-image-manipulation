@@ -17,6 +17,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@haskellian/async": "^1.0.2",
+    "framer-animations": "^1.5.8",
     "framer-motion": "^11.0.6",
     "opencv-tools": "^1.2.11",
     "opencv-ts": "^1.3.6",

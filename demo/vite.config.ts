@@ -20,11 +20,12 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      // external: ['fabric'], // to import a package from a CDN (no need for <rel> or anything else)
-      // output: {
-      //   paths: {
-      //     fabric: 'https://cdn.jsdelivr.net/npm/fabric@5.3.0/+esm'
-      //   }
+      external: ['fabric'], // to import a package from a CDN (no need for <rel> or anything else)
+      output: {
+        paths: {
+          fabric: 'https://cdn.jsdelivr.net/npm/fabric@5.3.0/+esm'
+        }
+      },
     },
-  },
+  }
 })
