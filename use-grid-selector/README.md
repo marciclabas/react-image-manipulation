@@ -2,7 +2,7 @@
 
 > Mobile friendly grid selector
 
-- Demo: https://moveread.github.io/use-grid-selector/
+- [Live Demo](https://marciclabas.github.io/react-image-manipulation/)
 
 ## Usage
 

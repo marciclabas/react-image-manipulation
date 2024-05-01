@@ -1,6 +1,6 @@
 {
   "name": "use-fabric",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "description": "Hooks-based API for FabricJS",
   "type": "module",
   "scripts": {
@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moveread/REPO.git"
+    "url": "git+https://github.com/marciclabas/react-image-manipulation.git",
+    "directory": "use-fabric"
   },
   "author": "Marcel Claramunt",
   "license": "ISC",

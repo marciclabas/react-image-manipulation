@@ -9,7 +9,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marciclabas/react-image-manipulation.git"
+    "url": "git+https://github.com/marciclabas/react-image-manipulation.git",
+    "directory": "use-correction"
   },
   "author": "Marcel Claramunt",
   "license": "ISC",

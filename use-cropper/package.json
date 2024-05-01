@@ -1,6 +1,6 @@
 {
   "name": "use-cropper",
-  "version": "1.3.4",
+  "version": "1.3.6",
   "description": "Perspective cropper using FabricJS on a canvas. Hooks based API",
   "type": "module",
   "scripts": {
@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moveread/REPO.git"
+    "url": "git+https://github.com/marciclabas/react-image-manipulation.git",
+    "directory": "use-cropper"
   },
   "author": "Marcel Claramunt",
   "license": "ISC",

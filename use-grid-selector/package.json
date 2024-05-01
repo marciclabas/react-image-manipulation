@@ -1,13 +1,14 @@
 {
     "name": "use-grid-selector",
-    "version": "1.2.1",
+    "version": "1.2.3",
     "description": "Mobile friendly grid selector",
     "scripts": {
         "build": "npx tsc -p tsconfig.json"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/moveread/use-grid-selector"
+        "url": "git+https://github.com/marciclabas/react-image-manipulation.git",
+        "directory": "use-grid-selector"
     },
     "type": "module",
     "author": "Marcel Claramunt",
