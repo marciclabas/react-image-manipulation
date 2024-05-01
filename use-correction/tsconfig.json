@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+
+    "target": "es2016",
+    "jsx": "react",
+
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    "declaration": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+
+    "paths": {
+      // "use-cropper": ["/home/m4rs/mr-github/lib/js/ui/use-cropper/use-cropper/src/index.ts"]
+    }
+  },
+  "include": ["./src"]
+}
