@@ -9,7 +9,7 @@ import { argminBy2 } from './util/arrays.js';
 import * as crn from './util/corners.js';
 import { RectCorners } from './util/corners.js';
 import { gridUrl } from './util/SvgGrid.js';
-import { managedPromise } from 'promises-tk'
+import { managedPromise } from '@haskellian/async/promises/single/managed.js';
 
 export type CornerOptions = Omit<fabric.ICircleOptions, 'left' | 'top' | 'originX' | 'originY' | 'hasControls'> & {
   radius?: number, selectedRadius?: number

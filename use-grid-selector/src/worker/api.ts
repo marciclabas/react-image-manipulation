@@ -1,7 +1,7 @@
 import { Model } from 'scoresheet-models'
-import { ManagedPromise, managedPromise } from 'promises-tk'
 import { Rectangle } from '../types.js'
 import { Paddings } from '../util/extract.js'
+import { ManagedPromise, managedPromise } from '@haskellian/async/promises/single/managed.js'
 
 export type Action = PostImage | PostConfig | Extract
 
