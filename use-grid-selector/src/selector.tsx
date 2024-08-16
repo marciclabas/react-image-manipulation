@@ -10,6 +10,7 @@ import * as crn from './util/corners.js';
 import { RectCorners } from './util/corners.js';
 import { gridUrl } from './util/SvgGrid.js';
 import { managedPromise } from '@haskellian/async/promises/single/managed.js';
+import { delay } from '@haskellian/async/promises/single/time.js';
 
 export type CornerOptions = Omit<fabric.ICircleOptions, 'left' | 'top' | 'originX' | 'originY' | 'hasControls'> & {
   radius?: number, selectedRadius?: number
@@ -22,6 +23,7 @@ const corner = (v: Vec2, params?: CornerOptions) => new fabric.Circle({
 export type Hook = {
   ref: RefCallback<HTMLCanvasElement>
   coords(): Rectangle
+  reset(): void
   animate: { loaded: false } | ({
     loaded: true
   } & Animate)
@@ -98,7 +100,7 @@ export function useGridSelector(src: string, template: Template, config?: Config
 
   const [loaded, setLoaded] = useState(false)
 
-  const { canvas, ref } = useFabric({ ...defaultCfg, ...canvasCfg});
+  const { canvas, ref, reset: resetFabric } = useFabric({ ...defaultCfg, ...canvasCfg});
 
   const moveTemplate = useCallback((corners: RectCorners<fabric.Object>, template: fabric.Object) => {
     const left = corners[0][0].left!
@@ -111,7 +113,8 @@ export function useGridSelector(src: string, template: Template, config?: Config
     template.setCoords()
   }, [gridCfg.size])
 
-  const initTemplate = useCallback((templ: fabric.Image, canvas: fabric.Canvas, sheet: fabric.Image) => {
+  const initTemplate = useCallback(async (templ: fabric.Image, canvas: fabric.Canvas, sheet: fabric.Image) => {
+    await delay(0)
     const tl = obj.rescale(startCoords.tl, sheet)
     const br = obj.rescale(vec.add(startCoords.tl, startCoords.size), sheet)
     const size = vec.sub(br, tl)
@@ -212,7 +215,7 @@ export function useGridSelector(src: string, template: Template, config?: Config
     const leftProp = l+r > 0 ? l/(l+r) : 0.5
     img.top =  (h - obj.height(img))*topProp
     img.left = (w - obj.width(img))*leftProp
-    
+
     canvas.add(img);
     img.sendToBack();
     sheetRef.current = img
@@ -292,5 +295,10 @@ export function useGridSelector(src: string, template: Template, config?: Config
     }
   }, [init, canvas]);
 
-  return { ref, coords: computeCoords, animate: loaded ? Object.assign(animate, { loaded }) : { loaded }  }
+  const reset = useCallback(() => {
+    started.current = false
+    resetFabric()
+  }, [resetFabric])
+
+  return { ref, reset, coords: computeCoords, animate: loaded ? Object.assign(animate, { loaded }) : { loaded }  }
 }

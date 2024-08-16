@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Config as CropperConfig, Corners, useCropper, DEFAULT_CORNERS } from 'use-cropper'
 import { CorrectionProps, Correction, View } from './ui.js'
 import { useLoader, useNotifiedState } from 'framer-animations'
@@ -49,6 +49,11 @@ export function useCorrection(src: string, api: CorrectAPI | null, config?: Conf
   const [modal, setModal] = useNotifiedState(false)
   const { loader, animate: animateLoader } = useLoader()
 
+  const inputBlob = useRef(managedPromise<Blob>())
+  useEffect(() => {
+    fetch(src).then(res => res.blob()).then(b => inputBlob.current.resolve(b))
+  }, [src])
+
   const [lastCorrected, setCorrected] = useState<{ url: string, blob: Blob, corners: Corners } | null>(null)
   const previewing = useRef<Corners | null>(null)
 
@@ -75,7 +80,7 @@ export function useCorrection(src: string, api: CorrectAPI | null, config?: Conf
     }
     previewing.current = corners
 
-    const blobPromise = api.correct(src, getCoords())
+    const blobPromise = api.correct(await inputBlob.current, getCoords())
     await setModal(true)
     animateLoader('load')
     const blob = await blobPromise
@@ -89,7 +94,7 @@ export function useCorrection(src: string, api: CorrectAPI | null, config?: Conf
     setCorrected({ url: URL.createObjectURL(blob), blob, corners })
     setModal(false)
     setView('preview')
-  }, [animateLoader, api, getCoords, lastCorrected?.corners, setModal, src, view, failAnimation])
+  }, [animateLoader, api, getCoords, lastCorrected?.corners, setModal, view, failAnimation])
 
   const reset = useCallback(async () => {
     if (!animate.loaded) return

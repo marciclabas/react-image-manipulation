@@ -23,7 +23,11 @@ export function SvgGrid({ rows, cols, size, lineProps, ...svgProps }: Props) {
       );
     }
   
-  return <svg xmlns="http://www.w3.org/2000/svg" version="1.1" shapeRendering="crispEdges" width={size[0]} height={size[1]} {...svgProps}>{lines}</svg>
+  return <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+    shapeRendering="crispEdges" width={size[0]} height={size[1]}
+    viewBox={`0 0 ${size[0]} ${size[1]}`} 
+    preserveAspectRatio="xMidYMid meet"
+    {...svgProps}>{lines}</svg>
 }
 
 export function gridSVG(template: Template, size: Vec2, config?: SVGProps<SVGLineElement>): string {

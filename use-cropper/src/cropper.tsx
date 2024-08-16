@@ -34,6 +34,7 @@ export type Config = {
   cornerOptions?: CornerOptions
   contourOptions?: ContourOptions
   lazyCoords?: boolean
+  clampInside?: boolean
 }
 export type Animate = (to: Partial<Corners>, config?: AnimationConfig) => Promise<void>
 export type Hook = {
@@ -54,7 +55,8 @@ export const defaultCfg: Required<Config> = {
   pads: { l: 0.1, r: 0.1, t: 0.1, b: 0.3 },
   canvasOptions: { selection: false, hoverCursor: 'pointer', backgroundColor: 'gray' },
   cornerOptions: { radius: 10, selectedRadius: 30, stroke: 'white', fill: undefined, strokeWidth: 2 },
-  contourOptions: { stroke: 'white', strokeWidth: 2, fill: undefined }
+  contourOptions: { stroke: 'white', strokeWidth: 2, fill: undefined },
+  clampInside: true
 }
 
 /**
@@ -81,7 +83,7 @@ export const defaultCfg: Required<Config> = {
  */
 export function useCropper(src: string, config?: Config): Hook {
 
-  const { pads, contourOptions, cornerOptions, lazyCoords, topBias, leftBias, startCoords, canvasOptions } = { ...defaultCfg, ...config }
+  const { pads, contourOptions, cornerOptions, lazyCoords, topBias, leftBias, startCoords, canvasOptions, clampInside } = { ...defaultCfg, ...config }
   const { l, r, t, b } = pads
   const startCorners = asArray(startCoords ?? defaultCfg.startCoords)
   const [[tl, tr, br, bl], setCoords] = useState(startCorners)
@@ -163,7 +165,8 @@ export function useCropper(src: string, config?: Config): Hook {
         const c = corners[movingCorner.current]
         const { x, y } = e.pointer!
         const [dx, dy] = sub([x, y], lastPtr.current)
-        const [left, top] = clamped([c.left! + dx, c.top! + dy], img)
+        const nextPos: Vec2 = [c.left! + dx, c.top! + dy]
+        const [left, top] = clampInside ? clamped(nextPos, img) : nextPos
         c.set({ left, top })
         c.setCoords()
         movePoly([left, top], movingCorner.current, polyline)
@@ -201,7 +204,7 @@ export function useCropper(src: string, config?: Config): Hook {
     })
     canvas.renderAll();
     setLoaded(true)
-  }, [b, l, r, t, computeCoords, contourOptions, cornerOptions, lazyCoords, leftBias, topBias, startCorners])
+  }, [b, l, r, t, computeCoords, contourOptions, cornerOptions, lazyCoords, leftBias, topBias, startCorners, clampInside])
 
   const init = useCallback((canvas: fabric.Canvas) => {
     fabric.Image.fromURL(

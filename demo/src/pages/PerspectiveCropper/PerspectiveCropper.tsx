@@ -10,10 +10,12 @@ const api = prepareWorker(worker)
 
 function PerspectiveCropper() {
 
-  const src = `${import.meta.env.BASE_URL}sheet.jpg`
+  const src = `${import.meta.env.BASE_URL}fia24.jpg`
+  console.log('Source:', src)
 
   const { ref, animate, getCoords } = useCropper(src, {
-    pads: {l: 0.1, r: 0.1, t: 0.1, b: 0.05 }
+    pads: {l: 0.1, r: 0.1, t: 0.1, b: 0.05 },
+    clampInside: false
   })
   const { animation, run } = useCropperAnimation(animate, {
     modalProps: {style: {background: '#0004'}}

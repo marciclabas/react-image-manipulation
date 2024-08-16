@@ -1,7 +1,7 @@
 import { Rectangle, useGridSelector } from 'use-grid-selector'
-import { grid, models } from 'scoresheet-models'
+import { grid, reify, ReifiedModel } from 'scoresheet-models'
 import { ButtonGroup, Button, HStack, Image, SimpleGrid, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { prepareWorker } from 'use-grid-selector/worker'
 import { managedPromise } from '@haskellian/async/promises/single'
 import { Vec2 } from '@haskellian/vec2'
@@ -21,13 +21,29 @@ const startCoords: Rectangle = {
   size: [0.95, 0.67]
 }
 
-const src = `${import.meta.env.BASE_URL}corrected-sheet.jpg`
+const model: ReifiedModel = reify({
+  boxWidth: 0.15,
+  rows: 20,
+  columns: [null, 0.05, null, 0.05, null]
+})
 
-function GridSeelctor() {
-  const { ref, coords } = useGridSelector(src, grid(models.fcde), { startCoords })
+const src = `${import.meta.env.BASE_URL}fia-corrected-512.png`
+
+function GridSelector() {
+  const g = useMemo(() => grid(model), [])
+  const { ref, coords } = useGridSelector(src, g, {
+    startCoords,
+    canvas: { selection: false, hoverCursor: 'pointer' },
+    pads: { l: 0.1, r: 0.1, t: 0.1, b: 0.1 },
+    cornerOptions: { stroke: 'green' },
+    grid: { line: { stroke: 'green' } },
+    templateOptions: { backgroundColor: '#0402' },
+  })
   const [{ tl, size }, setCoords] = useState<Rectangle>(startCoords)
   const [imgs, setImgs] = useState<string[]>([])
   const ready = useRef(managedPromise<void>())
+
+  useEffect(() => console.log('Images: ', imgs), [imgs])
 
   async function prepare() {
     await api.postImg(src)
@@ -37,16 +53,19 @@ function GridSeelctor() {
   useEffect(() => { prepare() }, [])
 
   async function extract() {
+    console.log('Extracting...')
     setImgs([])
-    const config = { coords: coords(), model: models.fcde }
+    const config = { coords: coords(), model }
     let results: string[] = []
     await ready.current
     console.time('Extract')
-    for (const i of range(0, 150, 15)) {
-      await Promise.all([...range(i, i+15)].map(async (i) => {
-        const blob = await api.extract(src, i, config)
-        if (blob)
-          results.push(URL.createObjectURL(blob))
+    for (const i of range(0, 120, 6)) {
+      await Promise.all([...range(i, i+6)].map(async (i) => {
+        const blob = await api.extract(src, i, config).catch(() => null)
+        if (blob) {
+          const url = URL.createObjectURL(blob)
+          results.push(url)
+        }
       }))
       const mod = 12
       if (i % mod === mod-1) {
@@ -85,4 +104,4 @@ function GridSeelctor() {
   )
 }
 
-export default GridSeelctor
+export default GridSelector

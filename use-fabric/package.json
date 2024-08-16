@@ -1,6 +1,6 @@
 {
   "name": "use-fabric",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Hooks-based API for FabricJS",
   "type": "module",
   "scripts": {
@@ -29,5 +29,8 @@
   },
   "peerDependencies": {
     "fabric": "^5.3.0"
+  },
+  "dependencies": {
+    "synced-hooks": "^1.1.2"
   }
 }

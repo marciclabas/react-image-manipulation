@@ -1,5 +1,6 @@
-import { RefCallback, useCallback, useRef, useState } from 'react'
+import { RefCallback, useCallback, useRef } from 'react'
 import { fabric } from 'fabric'
+import { useRefState } from 'synced-hooks'
 
 export type FabricHook = {
 	canvas: fabric.Canvas | null
@@ -10,7 +11,7 @@ export type FabricHook = {
 /** Hook for a `fabric.Canvas`
  * 
  * ```
- * const { ref, canvas } = useFabric({ background: 'red', ... })
+ * const { ref, canvas, reset } = useFabric({ background: 'red', ... })
  * 
  * function doSomeWithCanvas() {
  *    if (!canvas)
@@ -19,33 +20,46 @@ export type FabricHook = {
  *    canvas.renderAll(...)
  * }
  * 
- * return <canvas ref={ref} />
+ * return (
+ *   <>
+ *   	<button onClick={reset}>Reset</button>
+ *   	<canvas ref={ref} />
+ *   </>
+ * )
  * ```
  */
 export function useFabric(config?: fabric.ICanvasOptions): FabricHook {
-	const canvasRef = useRef<HTMLCanvasElement|null>(null)
-	const [canvas, setCanvas] = useState<fabric.Canvas | null>(null)
+	const nodeRef = useRef<HTMLCanvasElement|null>(null)
+	const started = useRef(false)
+	const [canvas, setCanvas, canvasRef] = useRefState<fabric.Canvas | null>(null)
 
-	const init = useCallback((node: HTMLCanvasElement | null) => {
-		if (!node || canvas !== null)
-			return
-		canvasRef.current = node
+	const init = useCallback((node: HTMLCanvasElement) => {
+		nodeRef.current = node
 		const parent = node.parentElement
 		const newCanvas = new fabric.Canvas(node, {
 			width: parent?.clientWidth, height: parent?.clientHeight,
 			...config
 		})
-    newCanvas.add
 		setCanvas(newCanvas)
-	}, [config, canvas])
-	
+	}, [config, setCanvas])
+
+	const ref = useCallback((node: HTMLCanvasElement | null) => {
+		if (!node || started.current)
+			return
+		started.current = true
+		init(node)
+	}, [init])
+
 	const reset = useCallback(() => {
-		if (canvas) {
-			canvas.dispose()
+		if (canvasRef.current) {
+      try { canvasRef.current.dispose() } catch { null }
 			setCanvas(null)
 		}
-		setTimeout(() => init(canvasRef.current), 0);
-	}, [canvas, init])
+		setTimeout(() => {
+			if (nodeRef.current)
+				init(nodeRef.current)
+		}, 0);
+	}, [setCanvas, init, canvasRef])
 
-	return { canvas, reset, ref: init }
+	return { canvas, reset, ref }
 }
